@@ -1,0 +1,21 @@
+.av-table-cius-col-codigo, .av-table-cius-col-icons {
+	width: 60px;
+	text-align: center;
+}
+
+.av-table-cius-col-tipo {
+	width: 100px;
+}
+
+.av-table-cius-col-cpf {
+	width: 200px;
+}
+
+.av-table-cius-col-bairro {
+	width: 300px;
+}
+
+.av-table-cius-col-valor {
+	width: 150px;
+	text-align: right;
+}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt"
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:data="http://www.thymeleaf.org/extras/data-attribute"
+	layout:decorate="~{layout/layout-padrao}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<link rel="stylesheet" type="text/css" th:href="@{/stylesheets/pesquisa-cius.css}"/>
+</head>
+
+<body>
+
+<section layout:fragment="conteudo">
+
+<div class="page-header">
+	<div class="container-fluid">
+		<h1>
+			Pesquisa CIU
+		</h1>
+	</div>
+</div>
+
+<div class="container-fluid">
+
+	<div class="alert  alert-success" th:if="${!#strings.isEmpty(mensagemExclusao)}" >
+		<i class="fa  fa-check-circle"></i>
+		<span th:text="${mensagemExclusao}"></span>
+	</div>
+
+	<form method="GET" class="form-vertical  js-form-loading" th:object="${ciuFilter}">
+		<div class="form-group">
+			<div class="input-group">
+				<!-- <input id="nome" type="text" class="form-control" th:field="*{nome}" placeholder="Pesquise pelo Nome" /> -->
+				<input id="cpf" type="text" class="form-control" th:field="*{cpf}" placeholder="Pesquise pelo CPF" />
+				<span class="input-group-btn" >
+					<button class="btn btn-default" type="submit">
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+				</span>
+			</div>
+		</div>
+	</form>
+	
+	<div class="table-responsive">
+		<table id="tabela-cius" class="table  table-striped  table-bordered  table-hover  table-condensed  js-sticky-table">
+			<thead class="aw-table-header-solid">
+				<tr>
+					<th class="av-table-cius-col-codigo">Código</th>
+					<th>Nome</th>
+					<th class="av-table-cius-col-bairro">Situação</th>
+					<th class="av-table-cius-col-bairro">Bairro</th>
+					<th class="av-table-cius-col-cpf">CPF</th>
+					<th class="av-table-cius-col-icons">Editar</th>
+					<th class="av-table-cius-col-icons">Excluir</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="ciu : ${cius}">
+					<td th:text="${ciu.codigo}" class="text-center"></td>
+					<td th:text="${ciu.nome}"></td>
+					<td th:text="#{|situacao.${ciu.situacao}|}"></td>
+					<td th:text="${ciu.bairro}"></td>
+					<td th:text="${ciu.cpf}"></td>
+					
+					<!-- <td th:text="#{|tipoCiu.${ciu.tipo}|}"></td>
+					<td th:text="|R$ ${{ciu.valor}}|" class="text-right"></td> -->
+					
+					<td class="text-center" >
+						<a th:href="@{/ciu/{codigo}(codigo=${ciu.codigo})}">
+							<i class="fa fa-pencil-square-o" style="cursor:pointer"></i>
+						</a>
+					</td>
+					<td class="text-center btn-danger" >
+						<i class="fa fa-trash" style="cursor:pointer"
+							data-toggle="modal" data-target="#confirmaExclusaoModal"
+							data:codigo="${ciu.codigo}"
+							data:url-apagar="@{/ciu/{codigo}(codigo=${ciu.codigo})}"
+						></i>
+					</td>
+				</tr>
+				<tr th:if="${cius.empty}">
+					<td colspan="7">Nenhum CIU cadastrado</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+	<div class="modal  fade" id="confirmaExclusaoModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+	  		<div class="modal-content">
+	  			<form th:action="@{/ciu}" method="POST">
+					<input type="hidden" name="_method" value="DELETE" />	  				
+	     			<div class="modal-header">
+		       			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		       				<span aria-hidden="true">&times;</span>
+		       			</button>
+		       			<h4 class="modal-title" id="myModalLabel">Excluir CIU</h4>
+	     			</div>
+	     			<div class="modal-body">
+	       				<span>Tem certeza que deseja excluir essa CIU?</span>
+	     			</div>
+	     			<div class="modal-footer">
+	       				<button type="button" class="btn  btn-default" data-dismiss="modal">Cancelar</button>
+	       				<button type="submit" class="btn  btn-primary">Excluir</button>
+	     			</div>
+	     		</form>
+	  		</div>
+		</div>
+	</div>
+
+</section>
+
+<th:block layout:fragment="javascript-extra">
+	<script th:src="@{/javascripts/excluir-ciu-modal.js}"></script>
+</th:block>
+	
+</body>
+</html>

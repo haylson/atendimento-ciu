@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt"
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+	<title>CIU - Sistema de Cadastro Individual de Usuários</title>
+
+	<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/vendors.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/algaworks.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/application.css}"/>
+
+</head>
+<body>
+
+<div class="aw-layout-page">
+
+	<nav class="navbar  navbar-fixed-top  navbar-default  js-sticky-reference" id="main-navbar">
+	  <div class="container-fluid">
+
+	    <div class="navbar-header">
+	      <a class="navbar-brand  hidden-xs" href="#">
+	        <img alt="CIU" th:src="@{/layout/images/logo-ciu-sistema.png}"/>
+	      </a>
+	    </div>
+
+	    <ul class="nav navbar-nav navbar-right">
+	    	<li>
+	    		<a href="#"><i class="fa fa-user" th:text="| ${#authentication.name}|"></i></a>
+	    	</li>
+	    	<li>
+	          <a href="#" class="js-sidebar-toggle"><i class="fa  fa-bars"></i></a>
+	        </li>
+		    <li>
+		      <a th:href="@{/logout}"><em class="fa fa-sign-out" ></em></a>
+		    </li> 
+	    </ul>
+
+	  </div>
+	</nav>
+
+	<aside class="aw-layout-sidebar  js-sidebar">
+		<div class="aw-layout-sidebar__content">
+
+		    <nav class="aw-menu  js-menu">
+		      <ul class="aw-menu__list">
+		
+		        <li class="aw-menu__item" sec:authorize="hasAnyRole('ASS','ADMIN')">
+		          <a th:href="@{/ciu/novo}"><i class="fa  fa-fw  fa-home"></i><span>Cadastro CIU</span></a>
+		        </li>
+		        
+		        <li class="aw-menu__item" sec:authorize="hasAnyRole('PESQUISA','ASS','ADMIN')">
+		          <a th:href="@{/ciu/pesquisa}"><i class="fa  fa-fw  fa-search"></i><span>Pesquisa CIU</span></a>
+		        </li>
+		        
+		        <!-- <li class="aw-menu__item" sec:authorize="hasAnyRole('PESQUISA','ASS','ADMIN')">
+		          <a th:href="@{/usuario/senha}"><i class="fa  fa-fw  fa-key"></i><span>Trocar Senha</span></a>
+		        </li> -->
+		
+		      </ul>
+		    </nav>
+		</div>
+	</aside>
+
+	<section class="aw-layout-content js-content" layout:fragment="conteudo"></section>
+	
+	<footer class="aw-layout-footer  js-content">
+		<div class="container-fluid">
+			<span class="aw-footer-disclaimer">&copy; 2017 - Cadastro Individual do Usuário. Desenvolvido por Haylson Martins.</span>
+		</div>
+	</footer>
+
+</div>
+
+<script th:src="@{/layout/javascripts/vendors.min.js}"></script>
+<script th:src="@{/layout/javascripts/algaworks.min.js}"></script>
+
+<script th:src="@{/javascripts/vendors/jquery.masknumber.min.js}"></script>
+<script th:src="@{/javascripts/vendors/jquery.maskedinput.min.js}"></script>
+<script>
+	$('.js-moeda').maskNumber({
+		decimal: ',',
+		thousands: '.'
+	});
+
+	jQuery("#dataAnalise").mask("99/99/9999");
+	jQuery("#cpf").mask("999.999.999-99");
+	jQuery("#telefone").mask("(99)9999.9999?9");
+
+	$(document).ready(function() {
+	    $('#situacao').change(function(){
+	        var tipoSituacao = $("#situacao option:selected").text();
+	        if (tipoSituacao == 'Em Análise') {
+	            $('#dataAnalise').attr('disabled', false);
+	        }else if (tipoSituacao != 'Em Análise') {
+	            $('#dataAnalise').attr('disabled', true);
+	            $('#dataAnalise').val('');
+	        }
+	    });
+	});
+	
+	$(document).ready(function() {
+	    $('#acessoLazer').change(function(){
+	        var temLazer = $("#acessoLazer option:selected").text();
+	        if (temLazer == 'Sim') {
+	            $('#lazer').attr('disabled', false);
+	        }else if (temLazer != 'Sim') {
+	            $('#lazer').attr('disabled', true);
+	            $('#lazer').val('');
+	        }
+	    });
+	});
+</script>
+
+<th:block layout:fragment="javascript-extra"></th:block>
+
+</body>
+</html>

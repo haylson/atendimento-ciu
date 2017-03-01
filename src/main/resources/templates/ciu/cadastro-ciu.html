@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="pt"
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout-padrao}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<link rel="stylesheet" type="text/css" th:href="@{/stylesheets/cadastro-cius.css}"/>
+</head>
+
+<body>
+
+<section layout:fragment="conteudo">
+
+<div class="page-header">
+	<div class="container-fluid">
+		<h1>
+			Cadastro Individual do Usuário - CIU
+		</h1>
+	</div>
+</div>
+
+<div class="container-fluid">
+
+	<form method="POST" class="form-vertical  js-form-loading" 
+			th:object="${ciu}" th:action="@{/ciu/novo}" >
+	
+		<div class="alert  alert-danger  alert-dismissible" role="alert" th:if="${#fields.hasAnyErrors()}" >
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<th:block th:each="error : ${#fields.detailedErrors()}">
+				<div>
+					<i class="fa  fa-exclamation-circle"></i>
+					<span th:text="${error.message}"></span>
+				</div>
+			</th:block> 
+		</div>
+		
+		<div class="alert  alert-success" th:if="${!#strings.isEmpty(mensagemSucesso)}" >
+			<i class="fa  fa-check-circle"></i>
+			<span th:text="${mensagemSucesso}"></span>
+		</div>
+		
+		<input type="hidden" th:field="*{codigo}" />
+		<!-- <input type="hidden" th:field="*{usuario}" /> -->
+		
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="form-group">
+					<label for="usuario">Usuário</label>
+					<input id="usuario" type="text" class="form-control" th:value="${ciu.usuario.nome}" readonly="readonly"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="form-group">
+					<label for="dataCadastro">Data Cadastro</label>
+					<input id="dataCadastro" type="text" class="form-control" th:field="*{dataCadastro}" readonly="readonly" />
+				</div>
+			</div>
+		</div>
+		
+		
+		<h3><u>Dados Pessoais</u></h3></br>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="numeroBeneficio">NB</label>
+					<input id="numeroBeneficio" type="text" class="form-control" th:field="*{numeroBeneficio}"/>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="telefone">Telefone</label>
+					<input id="telefone" type="text" class="form-control" th:field="*{telefone}"/>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="nome">Nome</label>
+					<input id="nome" type="text" class="form-control" th:field="*{nome}"/>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="endereco">Endereço</label>
+					<input id="endereco" type="text" class="form-control" th:field="*{endereco}"/>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="bairro">Bairro</label>
+					<input id="bairro" type="text" class="form-control" th:field="*{bairro}"/>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="cpf">CPF</label>
+					<input id="cpf" type="text" class="form-control" th:field="*{cpf}"/>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="bairro">CID</label>
+					<input id="bairro" type="text" class="form-control" th:field="*{cid}"/>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="estadoCivil">Estado Civil</label>
+					<select id="estadoCivil" class="form-control" th:field="*{estadoCivil}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="estadoCivil : ${estadosCivis}" th:value="${estadoCivil}" th:text="#{|estadoCivil.${estadoCivil}|}"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="situacao">Situação</label>
+					<select id="situacao" class="form-control" th:field="*{situacao}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="situacao : ${situacoes}" th:value="${situacao}" th:text="#{|situacao.${situacao}|}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="dataAnalise">Data Análise</label>
+					<input id="dataAnalise" type="text" class="form-control" th:field="*{dataAnalise}" disabled="disabled"/>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="sexo">Sexo</label>
+					<select id="sexo" class="form-control" th:field="*{sexo}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="sexo : ${sexos}" th:value="${sexo}" th:text="#{|sexo.${sexo}|}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="cor">Cor</label>
+					<select id="cor" class="form-control" th:field="*{cor}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="cor : ${cores}" th:value="${cor}" th:text="#{|cor.${cor}|}"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="faixaEtaria">Faixa Estária</label>
+					<select id="faixaEtaria" class="form-control" th:field="*{faixaEtaria}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="faixaEtaria : ${faixasEtarias}" th:value="${faixaEtaria}" th:text="#{|faixaEtaria.${faixaEtaria}|}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="especificidadeSocial">Especificidades Sociais, Etnicas ou Culturais da Família</label>
+					<select id="especificidadeSocial" class="form-control" th:field="*{especificidadeSocial}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="especificidade : ${especificidades}" th:value="${especificidade}" th:text="#{|especificidadeSocial.${especificidade}|}"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<h3><u>Acesso à Educação</u></h3></br>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="escolaridade">Escolaridade</label>
+					<select id="escolaridade" class="form-control" th:field="*{escolaridade}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="escolaridade : ${escolaridades}" th:value="${escolaridade}" th:text="#{|escolaridade.${escolaridade}|}"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		
+		<h3><u>Acesso ao Mercado de Trabalho</u></h3></br>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="vinculoEmpregaticio">Teve Vínculo Empregatício?</label>
+					<select id="vinculoEmpregaticio" class="form-control" th:field="*{vinculoEmpregaticio}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="vinculoEmpregaticio : ${vinculosEmpregaticios}" th:value="${vinculoEmpregaticio}" th:text="#{|vinculoEmpregaticio.${vinculoEmpregaticio}|}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="insercaoMT">Tipo de Inserção no Mercado de Trabalho</label>
+					<select id="insercaoMT" class="form-control" th:field="*{insercaoMT}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="insercaoMT : ${insercoesMT}" th:value="${insercaoMT}" th:text="#{|insercaoMT.${insercaoMT}|}"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="rendaFamiliar">Renda Familiar</label>
+					<select id="rendaFamiliar" class="form-control" th:field="*{rendaFamiliar}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="rendaFamiliar : ${rendas}" th:value="${rendaFamiliar}" th:text="#{|rendaFamiliar.${rendaFamiliar}|}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="cuidadosConstantes">Necessita de Cuidados Constantes?</label>
+					<select id="cuidadosConstantes" class="form-control" th:field="*{cuidadosConstantes}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="cuidado : ${cuidados}" th:value="${cuidado}" th:text="#{|cuidadosConstantes.${cuidado}|}"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="deficiencia">Deficiências Informadas</label>
+					<div class="bs-checkbox">
+						<ul>
+							<li>
+								<input type="checkbox" id="deficienciaVisual" th:name="deficienciaVisual" th:checked="${deficienciaVisual}"/>
+								<label for="deficienciaVisual">Visual</label>
+							</li>
+							<li>
+								<input type="checkbox" id="deficienciaAuditiva" th:name="deficienciaAuditiva" th:checked="${deficienciaAuditiva}"/>
+								<label for="deficienciaAuditiva">Auditiva</label>
+							</li>
+							<li>
+								<input type="checkbox" id="deficienciaIntelectual" th:name="deficienciaIntelectual" th:checked="${deficienciaIntelectual}"/>
+								<label for="deficienciaIntelectual">Intelectual</label>
+							</li>
+							<li>
+								<input type="checkbox" id="deficienciaTranstornoMental" th:name="deficienciaTranstornoMental" th:checked="${deficienciaTranstornoMental}"/>
+								<label for="deficienciaTranstornoMental">Transtorno Mental</label>
+							</li>
+							<li>
+								<input type="checkbox" id="deficienciaDoencaCronica" th:name="deficienciaDoencaCronica" th:checked="${deficienciaDoencaCronica}"/>
+								<label for="deficienciaDoencaCronica">Doença Crônica</label>
+							</li>
+							<li>
+								<input type="checkbox" id="defNeuroMusculoEsqueletica" th:name="defNeuroMusculoEsqueletica" th:checked="${defNeuroMusculoEsqueletica}"/>
+								<label for="defNeuroMusculoEsqueletica">NeuroMusculoEsquelética</label>
+							</li>
+							<li>
+								<input type="checkbox" id="deficienciaMultipla" th:name="deficienciaMultipla" th:checked="${deficienciaMultipla}"/>
+								<label for="deficienciaMultipla">Múltipla</label>
+							</li>
+							<li>
+								<input type="checkbox" id="deficienciaNaoInformada" th:name="deficienciaNaoInformada" th:checked="${deficienciaNaoInformada}"/>
+								<label for="deficienciaNaoInformada">Não Informada</label>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<h3><u>Acesso às Políticas Públicas</u></h3></br>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="redeEnsino">Rede Regular de Ensino</label>
+					<select id="redeEnsino" class="form-control" th:field="*{redeEnsino}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="redeEnsino : ${redesEnsino}" th:value="${redeEnsino}" th:text="#{|redeEnsino.${redeEnsino}|}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="localRedeEnsino">Localização da Rede de Ensino?</label>
+					<select id="localRedeEnsino" class="form-control" th:field="*{localRedeEnsino}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="localRedeEnsino : ${locaisRedeEnsino}" th:value="${localRedeEnsino}" th:text="#{|localRedeEnsino.${localRedeEnsino}|}"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="atendimentoSus">O SUS oferece o atendimento específico necessário?</label>
+					<select id="atendimentoSus" class="form-control" th:field="*{atendimentoSus}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="atendimentoSus : ${atendimentosSus}" th:value="${atendimentoSus}" th:text="#{|atendimentoSus.${atendimentoSus}|}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="localSus">Localização do SUS?</label>
+					<select id="localSus" class="form-control" th:field="*{localSus}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="localSus : ${locaisSus}" th:value="${localSus}" th:text="#{|localSus.${localSus}|}"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="usoMedicamento">Faz uso de medicamentos de forma contínua?</label>
+					<select id="usoMedicamento" class="form-control" th:field="*{usoMedicamento}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="usoMedicamento : ${usosMedicamento}" th:value="${usoMedicamento}" th:text="#{|usoMedicamento.${usoMedicamento}|}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="localSus">Quais as formas de aquisição do medicamento?</label>
+					<div class="bs-checkbox">
+						<ul>
+							<li>
+								<input type="checkbox" id="medicamentoComprado" th:name="medicamentoComprado" th:checked="${medicamentoComprado}"/>
+								<label for="medicamentoComprado">Comprado</label>
+							</li>
+							<li>
+								<input type="checkbox" id="medicamentoGratuito" th:name="medicamentoGratuito" th:checked="${medicamentoGratuito}"/>
+								<label for="medicamentoGratuito">Gratuito</label>
+							</li>
+						</ul>
+					</div>	
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="acessoLazer">Tem Acesso ao Lazer?</label>
+					<select id="acessoLazer" class="form-control" th:field="*{acessoLazer}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="acessoLazer : ${acessosLazer}" th:value="${acessoLazer}" th:text="#{|acessoLazer.${acessoLazer}|}"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="lazer">Qual Lazer?</label>
+					<input id="lazer" type="text" class="form-control" th:field="*{lazer}" disabled="disabled"/>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="deficiencia">Teve acesso à Política de Assistência Social através de:</label>
+					<div class="bs-checkbox">
+						<ul>
+							<li>
+								<input type="checkbox" id="cras" th:name="cras" th:checked="${cras}"/>
+								<label for="cras">CRAS</label>
+							</li>
+							<li>
+								<input type="checkbox" id="creas" th:name="creas" th:checked="${creas}"/>
+								<label for="creas">CREAS</label>
+							</li>
+							<li>
+								<input type="checkbox" id="servicoConvivencia" th:name="servicoConvivencia" th:checked="${servicoConvivencia}"/>
+								<label for="servicoConvivencia">Serviço de Convivência</label>
+							</li>
+							<li>
+								<input type="checkbox" id="beneficiosTransferenciaRenda" th:name="beneficiosTransferenciaRenda" th:checked="${beneficiosTransferenciaRenda}"/>
+								<label for="beneficiosTransferenciaRenda">Benefícios de Transferência de Renda</label>
+							</li>
+							<li>
+								<input type="checkbox" id="cadunico" th:name="cadunico" th:checked="${cadunico}"/>
+								<label for="cadunico">CadÚnico</label>
+							</li>
+							<li>
+								<input type="checkbox" id="beneficiosEventuais" th:name="beneficiosEventuais" th:checked="${beneficiosEventuais}"/>
+								<label for="beneficiosEventuais">Benefícios Eventuais</label>
+							</li>
+							<li>
+								<input type="checkbox" id="centroPop" th:name="centroPop" th:checked="${centroPop}"/>
+								<label for="centroPop">Centro POP</label>
+							</li>
+							<li>
+								<input type="checkbox" id="albergue" th:name="albergue" th:checked="${albergue}"/>
+								<label for="albergue">Albergue</label>
+							</li>
+							<li>
+								<input type="checkbox" id="semAcessoPoliticaSocial" th:name="semAcessoPoliticaSocial" th:checked="${semAcessoPoliticaSocial}"/>
+								<label for="albergue">Não obteve acesso</label>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="acessoTransportePublico">Tem acesso ao Transporte Público?</label>
+					<select id="acessoTransportePublico" class="form-control" th:field="*{acessoTransportePublico}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="acessoTransportePublico : ${acessosTransportePublico}" th:value="${acessoTransportePublico}" th:text="#{|acessoTransportePublico.${acessoTransportePublico}|}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="transporteAdaptado">Transporte Adaptado?</label>
+					<select id="transporteAdaptado" class="form-control" th:field="*{transporteAdaptado}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="transporteAdaptado : ${transportesAdaptado}" th:value="${transporteAdaptado}" th:text="#{|transporteAdaptado.${transporteAdaptado}|}"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="transporteGratuito">Transporte Gratuito?</label>
+					<select id="transporteGratuito" class="form-control" th:field="*{transporteGratuito}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="transporteGratuito : ${transportesGratuito}" th:value="${transporteGratuito}" th:text="#{|transporteGratuito.${transporteGratuito}|}"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		
+				<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="deficiencia">Tem acesso a tecnologias?</label>
+					<div class="bs-checkbox">
+						<ul>
+							<li>
+								<input type="checkbox" id="internet" th:name="internet" th:checked="${internet}"/>
+								<label for="internet">Internet</label>
+							</li>
+							<li>
+								<input type="checkbox" id="computador" th:name="computador" th:checked="${computador}"/>
+								<label for="computador">Computador</label>
+							</li>
+							<li>
+								<input type="checkbox" id="televisao" th:name="televisao" th:checked="${televisao}"/>
+								<label for="televisao">Televisão</label>
+							</li>
+							<li>
+								<input type="checkbox" id="celular" th:name="celular" th:checked="${celular}"/>
+								<label for="celular">Celular</label>
+							</li>
+							<li>
+								<input type="checkbox" id="radio" th:name="radio" th:checked="${radio}"/>
+								<label for="radio">Rádio</label>
+							</li>
+							<li>
+								<input type="checkbox" id="semAcesso" th:name="semAcesso" th:checked="${semAcesso}"/>
+								<label for="semAcesso">Não tem acesso</label>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="conhecimentoBPC">Como tomou conhecimento do BPC? (Selecione a opção principal)</label>
+					<select id="conhecimentoBPC" class="form-control" th:field="*{conhecimentoBPC}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="conhecimentoBPC : ${conhecimentosBPC}" th:value="${conhecimentoBPC}" th:text="#{|conhecimentoBPC.${conhecimentoBPC}|}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="escolhaAPS">Por que escolheu essa APS para atendimento? (Selecione a opção principal)</label>
+					<select id="escolhaAPS" class="form-control" th:field="*{escolhaAPS}">
+						<option value="">** Selecione uma opção **</option>
+						<option th:each="escolhaAPS : ${escolhasAPS}" th:value="${escolhaAPS}" th:text="#{|escolhaAPS.${escolhaAPS}|}"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="avaliacao">História Social</label>
+					<textarea id="avaliacao" class="form-control custom-control" th:field="*{avaliacao}" rows="10" placeholder="Escreva a história social aqui...">
+					</textarea>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="parecer">Parecer</label>
+					<textarea id="parecer" class="form-control custom-control" th:field="*{parecer}" rows="10" placeholder="Escreva aqui o Parecer...">
+					</textarea>
+				</div>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<button class="btn  btn-primary" type="submit">Salvar</button>
+		</div>
+				
+		<!-- <div class="col-sm-6">
+				<div class="form-group">
+					<label for="valor">Valor</label>
+					<input id="valor" type="text" class="form-control js-moeda" th:field="*{valor}"/>
+				</div>
+			</div>
+		</div> -->
+
+	</form>
+</div>
+
+</section>
+</body>
+</html>

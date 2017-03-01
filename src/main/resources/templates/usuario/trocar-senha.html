@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt"
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout-padrao}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+
+<section layout:fragment="conteudo">
+
+	<div class="page-header">
+		<div class="container-fluid">
+			<h1>
+				Alterar a senha
+			</h1>
+		</div>
+	</div>
+	
+	<div class="container-fluid">
+	
+		<form method="POST" class="form-vertical  js-form-loading" 
+				th:object="${usuario}" th:action="@{/usuario/senha}" >
+				
+			<div class="alert  alert-danger  alert-dismissible" role="alert" th:if="${#fields.hasAnyErrors()}" >
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<th:block th:each="error : ${#fields.detailedErrors()}">
+					<div>
+						<i class="fa  fa-exclamation-circle"></i>
+						<span th:text="${error.message}"></span>
+					</div>
+				</th:block> 
+			</div>
+			
+			<div class="alert  alert-success" th:if="${!#strings.isEmpty(mensagemSucesso)}" >
+				<i class="fa  fa-check-circle"></i>
+				<span th:text="${mensagemSucesso}"></span>
+			</div>
+				
+			<input type="hidden" th:field="*{id}" />
+			<input type="hidden" th:field="*{nome}" />
+		
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="novaSenha">Nova Senha</label>
+						<input id="novaSenha" type="password" class="form-control" placeholder="Digite sua nova senha" th:field="*{novaSenha}"/>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="repetirSenha">Repetir Nova Senha</label>
+						<input id="repetirSenha" type="password" class="form-control" placeholder="Digite novamente sua nova senha" th:field="*{repetirSenha}"/>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<button class="btn  btn-primary" type="submit">Salvar</button>
+			</div>
+				
+		</form>
+		
+	</div>
+
+</section>
+</body>
+</html>
